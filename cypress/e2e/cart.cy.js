@@ -1,0 +1,78 @@
+describe('Cart E2E Tests', () => {
+    beforeEach(() => {
+        cy.clearLocalStorage('cy_current_user')
+        cy.clearLocalStorage('cy_cart')
+        cy.login()
+    })
+
+    it('TC01 - Giỏ hàng trống khi chưa thêm sản phẩm', () => {
+        cy.visit('/cart')
+        cy.get('[data-testid=empty-cart]').should('be.visible')
+        cy.get('[data-testid=shop-now-btn]').should('exist')
+    })
+
+    it('TC02 - Thêm sản phẩm vào giỏ và kiểm tra badge', () => {
+        cy.visit('/products')
+        cy.get('[data-testid=product-card]')
+            .not(':has([data-testid=out-of-stock])')
+            .first()
+            .find('[data-testid=add-to-cart-btn]')
+            .click()
+        cy.get('[data-testid=toast]').should('contain', 'Đã thêm')
+        cy.get('[data-testid=cart-badge]').should('exist').and('contain', '1')
+    })
+
+    it('TC03 - Tăng số lượng sản phẩm trong giỏ', () => {
+        cy.visit('/products')
+        cy.get('[data-testid=product-card]')
+            .not(':has([data-testid=out-of-stock])')
+            .first()
+            .find('[data-testid=add-to-cart-btn]')
+            .click()
+        cy.visit('/cart')
+        cy.get('[data-testid=qty-value]').first().should('contain', '1')
+        cy.get('[data-testid=qty-increase]').first().click()
+        cy.get('[data-testid=qty-value]').first().should('contain', '2')
+    })
+
+    it('TC04 - Giảm số lượng sản phẩm trong giỏ', () => {
+        cy.visit('/products')
+        cy.get('[data-testid=product-card]')
+            .not(':has([data-testid=out-of-stock])')
+            .first()
+            .find('[data-testid=add-to-cart-btn]')
+            .click()
+        cy.visit('/cart')
+        cy.get('[data-testid=qty-increase]').first().click()
+        cy.get('[data-testid=qty-value]').first().should('contain', '2')
+        cy.get('[data-testid=qty-decrease]').first().click()
+        cy.get('[data-testid=qty-value]').first().should('contain', '1')
+        cy.get('[data-testid=qty-decrease]').first().should('be.disabled')
+    })
+
+    it('TC05 - Xóa sản phẩm khỏi giỏ hàng', () => {
+        cy.visit('/products')
+        cy.get('[data-testid=product-card]')
+            .not(':has([data-testid=out-of-stock])')
+            .first()
+            .find('[data-testid=add-to-cart-btn]')
+            .click()
+        cy.visit('/cart')
+        cy.get('[data-testid=cart-item]').should('have.length', 1)
+        cy.get('[data-testid=remove-item-btn]').first().click()
+        cy.get('[data-testid=empty-cart]').should('be.visible')
+    })
+
+    it('TC06 - Đặt hàng thành công và giỏ bị xoá', () => {
+        cy.visit('/products')
+        cy.get('[data-testid=product-card]')
+            .not(':has([data-testid=out-of-stock])')
+            .first()
+            .find('[data-testid=add-to-cart-btn]')
+            .click()
+        cy.visit('/cart')
+        cy.get('[data-testid=checkout-btn]').click()
+        cy.get('[data-testid=toast]').should('contain', 'thành công')
+        cy.get('[data-testid=empty-cart]').should('be.visible')
+    })
+})
