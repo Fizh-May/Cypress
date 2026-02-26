@@ -1,121 +1,71 @@
-# 🛒 ShopTest — React + Cypress Testing Demo
+# 🛒 ShopTest — React E2E & Component Testing with Cypress
 
-Ứng dụng web thương mại điện tử xây dựng bằng **React + Vite**, tích hợp kiểm thử toàn diện bằng **Cypress** (E2E Testing & Component Testing).
+![React](https://img.shields.io/badge/React-19-blue?logo=react&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white) ![Cypress](https://img.shields.io/badge/Cypress-15-17202C?logo=cypress&logoColor=white) ![Testing Library](https://img.shields.io/badge/Testing%20Library-Cypress-E33332?logo=testinglibrary&logoColor=white)
 
-## 📦 Công nghệ sử dụng
+> **ShopTest** là ứng dụng web thương mại điện tử xây dựng bằng **ReactJS** và **Vite**, tích hợp kiểm thử toàn diện bằng **Cypress** — bao gồm cả **E2E Testing** và **Component Testing** với **56 test cases**.
 
-| Mục đích | Công nghệ |
-|---|---|
-| Frontend | React 19, React Router v7 |
-| Build tool | Vite 7 |
-| Testing | Cypress 15 |
-| Styling | Vanilla CSS (Dark theme, Glassmorphism) |
+🌐 **Live Demo:** [https://cypress-mocha.vercel.app/](https://cypress-mocha.vercel.app/)
 
-## 🚀 Cài đặt & Chạy
+---
 
-```bash
-# Cài đặt dependencies
-npm install
+## 🚀 Features
 
-# Chạy dev server
-npm run dev
-```
+### 🔐 Authentication
+*   **Đăng nhập / Đăng ký** với form validation đầy đủ
+*   **Protected Routes** — Dashboard, Cart, Profile yêu cầu đăng nhập
+*   **Toggle password** visibility, password strength indicator
+*   **Mock API** sử dụng localStorage (không cần backend)
 
-Mở trình duyệt tại `https://cypress-mocha.vercel.app/`
+### 🛍️ Product Management
+*   **Danh sách sản phẩm** với grid layout responsive
+*   **Tìm kiếm** theo tên sản phẩm (real-time)
+*   **Lọc danh mục** — Electronics, Sports, Home, Fashion
 
-### Tài khoản demo
+### 🛒 Shopping Cart
+*   **Thêm / Xóa / Cập nhật** số lượng sản phẩm
+*   **Tính tổng tiền** tự động
+*   **Persist state** qua localStorage (không mất khi refresh)
+*   **Đặt hàng** với thông báo thành công
 
-| Email | Mật khẩu |
-|---|---|
-| `admin@test.com` | `Admin@123` |
-| `john@test.com` | `Test@123` |
+### 🎨 UI/UX
+*   **Dark theme** premium với glassmorphism effects
+*   **Micro-animations** và hover effects
+*   **Responsive design** cho mọi kích thước màn hình
+*   **Toast notifications** cho mọi hành động
 
-## ✅ Chạy Cypress Tests
+---
 
-```bash
-# Mở Cypress UI (chọn browser thủ công)
-npm run cy:open
+## 🛠️ Tech Stack
 
-# Chạy E2E tests (headless, Edge)
-npm run cy:e2e
+### Frontend
+-   **Core**: ReactJS (v19), React Router v7
+-   **Build**: Vite 7
+-   **State**: Context API (AuthContext, CartContext)
+-   **Styling**: Vanilla CSS (Dark theme, Inter font)
 
-# Chạy Component tests (headless, Edge)
-npm run cy:component
+### Testing
+-   **Framework**: Cypress 15
+-   **E2E Testing**: 32 test cases across 5 spec files
+-   **Component Testing**: 29 test cases across 6 spec files
+-   **Utilities**: @testing-library/cypress
 
-# Chạy bằng Electron (ổn định nhất trên Windows)
-npx cypress run --e2e --browser electron
-npx cypress run --component --browser electron
-```
+---
 
-> **Lưu ý:** E2E tests yêu cầu dev server đang chạy (`npm run dev`). Component tests không cần.
+## 🧪 Test Cases (56 total)
 
-## 🗂️ Cấu trúc dự án
+### E2E Testing — 32 tests
 
-```
-├── src/
-│   ├── components/        # UI components tái sử dụng
-│   │   ├── Header.jsx         # Header + navigation + cart badge
-│   │   ├── ProductCard.jsx    # Card hiển thị sản phẩm
-│   │   ├── CartItem.jsx       # Item trong giỏ hàng
-│   │   ├── Toast.jsx          # Thông báo toast
-│   │   └── ProtectedRoute.jsx # Bảo vệ route cần đăng nhập
-│   ├── context/           # React Context (state toàn cục)
-│   │   ├── AuthContext.jsx    # Quản lý xác thực người dùng
-│   │   └── CartContext.jsx    # Quản lý giỏ hàng (persist localStorage)
-│   ├── pages/             # Các trang
-│   │   ├── HomePage.jsx       # Trang chủ
-│   │   ├── LoginPage.jsx      # Đăng nhập
-│   │   ├── RegisterPage.jsx   # Đăng ký
-│   │   ├── DashboardPage.jsx  # Dashboard (protected)
-│   │   ├── ProductsPage.jsx   # Danh sách sản phẩm
-│   │   ├── CartPage.jsx       # Giỏ hàng
-│   │   ├── ProfilePage.jsx    # Hồ sơ cá nhân
-│   │   └── NotFoundPage.jsx   # Trang 404
-│   ├── services/          # Mock API services
-│   │   ├── authService.js     # API xác thực (localStorage)
-│   │   └── productService.js  # API sản phẩm
-│   ├── App.jsx            # Router chính
-│   ├── main.jsx           # Entry point
-│   └── index.css          # Global styles (dark theme)
-├── cypress/
-│   ├── e2e/               # E2E test specs
-│   │   ├── login.cy.js        # 8 test cases
-│   │   ├── register.cy.js     # 7 test cases
-│   │   ├── products.cy.js     # 6 test cases
-│   │   ├── cart.cy.js         # 6 test cases
-│   │   └── navigation.cy.js   # 5 test cases
-│   ├── component/         # Component test specs
-│   │   ├── LoginForm.cy.jsx       # 6 test cases
-│   │   ├── RegisterForm.cy.jsx    # 5 test cases
-│   │   ├── ProductCard.cy.jsx     # 5 test cases
-│   │   ├── CartItem.cy.jsx        # 5 test cases
-│   │   ├── Header.cy.jsx          # 4 test cases
-│   │   └── Toast.cy.jsx           # 4 test cases
-│   └── support/           # Cypress support files
-│       ├── commands.js        # Shared custom commands
-│       ├── e2e.js             # E2E setup + login/logout commands
-│       ├── component.js       # Component test setup (mount)
-│       └── component-index.html
-├── cypress.config.js      # Cấu hình Cypress
-├── vite.config.js         # Cấu hình Vite
-└── package.json
-```
-
-## 🧪 Tổng hợp Test Cases (56 tests)
-
-### E2E Testing (32 tests)
-
-| Spec file | Chức năng | Số TC |
+| Spec | Chức năng | TC |
 |---|---|:---:|
 | `login.cy.js` | Đăng nhập, validation, toggle password, chuyển trang | 8 |
 | `register.cy.js` | Đăng ký, mật khẩu không khớp, email trùng, validation | 7 |
 | `products.cy.js` | Hiển thị sản phẩm, tìm kiếm, lọc danh mục | 6 |
 | `cart.cy.js` | Giỏ hàng trống, thêm/sửa/xóa sản phẩm, đặt hàng | 6 |
-| `navigation.cy.js` | Header links, logo, protected routes, trang 404 | 5 |
+| `navigation.cy.js` | Header links, protected routes, trang 404 | 5 |
 
-### Component Testing (29 tests)
+### Component Testing — 29 tests
 
-| Spec file | Component | Số TC |
+| Spec | Component | TC |
 |---|---|:---:|
 | `LoginForm.cy.jsx` | LoginPage | 6 |
 | `RegisterForm.cy.jsx` | RegisterPage | 5 |
@@ -124,11 +74,67 @@ npx cypress run --component --browser electron
 | `Header.cy.jsx` | Header | 4 |
 | `Toast.cy.jsx` | Toast | 4 |
 
-## 📋 Chức năng chính
+---
 
-- **Xác thực:** Đăng nhập / Đăng ký / Đăng xuất với mock API (localStorage)
-- **Protected Routes:** Dashboard, Cart, Profile yêu cầu đăng nhập
-- **Sản phẩm:** Duyệt, tìm kiếm theo tên, lọc theo danh mục
-- **Giỏ hàng:** Thêm / xóa / cập nhật số lượng, tính tổng tiền, đặt hàng
-- **Hồ sơ:** Xem và chỉnh sửa thông tin cá nhân
-- **UI/UX:** Dark theme, glassmorphism, animation, responsive design
+## � Installation & Usage
+
+```bash
+# Clone repository
+git clone https://github.com/Fizh-May/Cypress.git
+cd Cypress
+
+# Install dependencies
+npm install
+
+# Start dev server
+npm run dev
+```
+
+### Tài khoản demo
+
+| Email | Password |
+|---|---|
+| `admin@test.com` | `Admin@123` |
+| `john@test.com` | `Test@123` |
+
+### Run Cypress Tests
+
+```bash
+# Mở Cypress UI (interactive mode)
+npm run cy:open
+
+# Chạy E2E tests (headless)
+npm run cy:e2e
+
+# Chạy Component tests (headless)
+npm run cy:component
+```
+
+> ⚠️ **Note:** E2E tests yêu cầu dev server đang chạy (`npm run dev`). Component tests không cần.
+
+---
+
+## 🗂️ Project Structure
+
+```
+├── src/
+│   ├── components/          # Reusable UI components
+│   ├── context/             # AuthContext, CartContext
+│   ├── pages/               # 8 pages (Login, Register, Products, Cart, ...)
+│   ├── services/            # Mock API (auth, products)
+│   └── index.css            # Global dark theme styles
+├── cypress/
+│   ├── e2e/                 # 5 E2E spec files
+│   ├── component/           # 6 Component spec files
+│   └── support/             # Custom commands & setup
+├── cypress.config.js
+└── package.json
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please fork the repo and submit a PR.
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
