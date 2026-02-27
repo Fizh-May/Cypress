@@ -4,13 +4,13 @@ import { useCart } from '../context/CartContext'
 
 export default function DashboardPage() {
     const { user } = useAuth()
-    const { items, total } = useCart()
+    const { total, totalItems } = useCart()
 
     const formatPrice = (p) =>
         new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(p)
 
     const stats = [
-        { label: 'Sản phẩm trong giỏ', value: items.reduce((s, i) => s + i.qty, 0), icon: '📦', testId: 'stat-items' },
+        { label: 'Sản phẩm trong giỏ', value: totalItems, icon: '📦', testId: 'stat-items' },
         { label: 'Tổng giá trị giỏ hàng', value: formatPrice(total), icon: '💰', testId: 'stat-total' },
         { label: 'Danh mục yêu thích', value: 'Electronics', icon: '⭐', testId: 'stat-category' },
         { label: 'Trạng thái tài khoản', value: user?.role === 'admin' ? 'Admin' : 'User', icon: '👤', testId: 'stat-role' },
@@ -50,7 +50,7 @@ export default function DashboardPage() {
                     </Link>
                     <Link to="/cart" className="quick-card" data-testid="quick-cart">
                         <span className="quick-icon">🛒</span>
-                        <span>Giỏ hàng ({items.length})</span>
+                        <span>Giỏ hàng ({totalItems})</span>
                     </Link>
                     <Link to="/profile" className="quick-card" data-testid="quick-profile">
                         <span className="quick-icon">👤</span>

@@ -23,6 +23,11 @@ const mountHeader = (isLoggedIn = false) => {
 }
 
 describe('Header Component Tests', () => {
+    beforeEach(() => {
+        localStorage.removeItem('cy_current_user')
+        localStorage.removeItem('cy_cart')
+    })
+
     it('TC01 - Render header không đăng nhập: show login/register', () => {
         mountHeader(false)
         cy.get('[data-testid=header]').should('exist')

@@ -1,14 +1,19 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
+import { useCart } from '../context/CartContext'
 import Toast from '../components/Toast'
 
 export default function ProfilePage() {
     const { user, updateProfile } = useAuth()
+    const { items, totalItems, total } = useCart()
     const [editing, setEditing] = useState(false)
     const [form, setForm] = useState({ name: user?.name || '', email: user?.email || '' })
     const [loading, setLoading] = useState(false)
     const [toast, setToast] = useState(null)
     const [errors, setErrors] = useState({})
+
+    const formatPrice = (p) =>
+        new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(p)
 
     const validate = () => {
         const e = {}
@@ -47,76 +52,120 @@ export default function ProfilePage() {
                 <h1>Hồ sơ cá nhân</h1>
             </div>
 
-            <div className="profile-card" data-testid="profile-card">
-                <div className="profile-hero">
-                    <div className="avatar-xl" data-testid="profile-avatar">{user?.avatar}</div>
-                    <div>
-                        <h2 data-testid="profile-name">{user?.name}</h2>
-                        <p data-testid="profile-email">{user?.email}</p>
-                        <span className="badge badge-primary" data-testid="profile-role">{user?.role}</span>
+            <div className="profile-layout">
+                {/* LEFT — profile card */}
+                <div className="profile-card" data-testid="profile-card">
+                    <div className="profile-hero">
+                        <div className="avatar-xl" data-testid="profile-avatar">{user?.avatar}</div>
+                        <div>
+                            <h2 data-testid="profile-name">{user?.name}</h2>
+                            <p data-testid="profile-email">{user?.email}</p>
+                            <span className="badge badge-primary" data-testid="profile-role">{user?.role}</span>
+                        </div>
                     </div>
+
+                    {!editing ? (
+                        <div className="profile-view" data-testid="profile-view">
+                            <div className="info-row">
+                                <label>Họ và tên</label>
+                                <span data-testid="view-name">{user?.name}</span>
+                            </div>
+                            <div className="info-row">
+                                <label>Email</label>
+                                <span data-testid="view-email">{user?.email}</span>
+                            </div>
+                            <div className="info-row">
+                                <label>Vai trò</label>
+                                <span data-testid="view-role">{user?.role}</span>
+                            </div>
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => setEditing(true)}
+                                data-testid="edit-profile-btn"
+                            >
+                                ✏️ Chỉnh sửa hồ sơ
+                            </button>
+                        </div>
+                    ) : (
+                        <form onSubmit={handleSave} data-testid="profile-form" noValidate>
+                            <div className="form-group">
+                                <label htmlFor="profile-name">Họ và tên</label>
+                                <input
+                                    id="profile-name"
+                                    type="text"
+                                    className={`form-input ${errors.name ? 'input-error' : ''}`}
+                                    value={form.name}
+                                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                                    data-testid="profile-name-input"
+                                />
+                                {errors.name && <p className="field-error" data-testid="name-error">{errors.name}</p>}
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="profile-email">Email</label>
+                                <input
+                                    id="profile-email"
+                                    type="email"
+                                    className={`form-input ${errors.email ? 'input-error' : ''}`}
+                                    value={form.email}
+                                    onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                                    data-testid="profile-email-input"
+                                />
+                                {errors.email && <p className="field-error" data-testid="email-error">{errors.email}</p>}
+                            </div>
+
+                            <div className="form-actions">
+                                <button type="submit" className="btn btn-primary" disabled={loading} data-testid="save-profile-btn">
+                                    {loading ? 'Đang lưu...' : '💾 Lưu thay đổi'}
+                                </button>
+                                <button type="button" className="btn btn-outline" onClick={handleCancel} data-testid="cancel-edit-btn">
+                                    Huỷ
+                                </button>
+                            </div>
+                        </form>
+                    )}
                 </div>
 
-                {!editing ? (
-                    <div className="profile-view" data-testid="profile-view">
-                        <div className="info-row">
-                            <label>Họ và tên</label>
-                            <span data-testid="view-name">{user?.name}</span>
+                {/* RIGHT — account stats */}
+                <div className="profile-sidebar">
+                    <div className="profile-stat-card">
+                        <h3 className="profile-stat-title">📦 Giỏ hàng</h3>
+                        <div className="profile-stat-row">
+                            <span>Sản phẩm</span>
+                            <strong>{items.length} loại</strong>
                         </div>
-                        <div className="info-row">
-                            <label>Email</label>
-                            <span data-testid="view-email">{user?.email}</span>
+                        <div className="profile-stat-row">
+                            <span>Số lượng</span>
+                            <strong>{totalItems} sản phẩm</strong>
                         </div>
-                        <div className="info-row">
-                            <label>Vai trò</label>
-                            <span data-testid="view-role">{user?.role}</span>
+                        <div className="profile-stat-row">
+                            <span>Tổng tiền</span>
+                            <strong className="text-primary">{formatPrice(total)}</strong>
                         </div>
-                        <button
-                            className="btn btn-primary"
-                            onClick={() => setEditing(true)}
-                            data-testid="edit-profile-btn"
-                        >
-                            ✏️ Chỉnh sửa hồ sơ
-                        </button>
                     </div>
-                ) : (
-                    <form onSubmit={handleSave} data-testid="profile-form" noValidate>
-                        <div className="form-group">
-                            <label htmlFor="profile-name">Họ và tên</label>
-                            <input
-                                id="profile-name"
-                                type="text"
-                                className={`form-input ${errors.name ? 'input-error' : ''}`}
-                                value={form.name}
-                                onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                                data-testid="profile-name-input"
-                            />
-                            {errors.name && <p className="field-error" data-testid="name-error">{errors.name}</p>}
-                        </div>
 
-                        <div className="form-group">
-                            <label htmlFor="profile-email">Email</label>
-                            <input
-                                id="profile-email"
-                                type="email"
-                                className={`form-input ${errors.email ? 'input-error' : ''}`}
-                                value={form.email}
-                                onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                                data-testid="profile-email-input"
-                            />
-                            {errors.email && <p className="field-error" data-testid="email-error">{errors.email}</p>}
+                    <div className="profile-stat-card">
+                        <h3 className="profile-stat-title">🔐 Tài khoản</h3>
+                        <div className="profile-stat-row">
+                            <span>Loại tài khoản</span>
+                            <strong>{user?.role === 'admin' ? 'Quản trị viên' : 'Người dùng'}</strong>
                         </div>
+                        <div className="profile-stat-row">
+                            <span>ID</span>
+                            <strong>#{user?.id}</strong>
+                        </div>
+                        <div className="profile-stat-row">
+                            <span>Trạng thái</span>
+                            <span className="profile-status-dot">
+                                <span className="status-dot" /> Đang hoạt động
+                            </span>
+                        </div>
+                    </div>
 
-                        <div className="form-actions">
-                            <button type="submit" className="btn btn-primary" disabled={loading} data-testid="save-profile-btn">
-                                {loading ? 'Đang lưu...' : '💾 Lưu thay đổi'}
-                            </button>
-                            <button type="button" className="btn btn-outline" onClick={handleCancel} data-testid="cancel-edit-btn">
-                                Huỷ
-                            </button>
-                        </div>
-                    </form>
-                )}
+                    <div className="profile-stat-card profile-tip-card">
+                        <p>💡 Bạn có thể thay đổi tên và email bất cứ lúc nào bằng nút <strong>Chỉnh sửa hồ sơ</strong>.</p>
+                    </div>
+                </div>
             </div>
         </div>
     )

@@ -55,7 +55,11 @@ export default function LoginPage() {
                 />
             )}
             <div className="auth-card">
+                <Link to="/" className="auth-back-link" data-testid="back-home">
+                    ← Trang chủ
+                </Link>
                 <div className="auth-header">
+
                     <div className="auth-logo">🔐</div>
                     <h1>Đăng nhập</h1>
                     <p>Chào mừng bạn quay trở lại!</p>

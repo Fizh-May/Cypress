@@ -63,6 +63,9 @@ export default function RegisterPage() {
         <div className="auth-page" data-testid="register-page">
             {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
             <div className="auth-card auth-card-wide">
+                <Link to="/" className="auth-back-link" data-testid="back-home">
+                    ← Trang chủ
+                </Link>
                 <div className="auth-header">
                     <div className="auth-logo">✨</div>
                     <h1>Tạo tài khoản</h1>

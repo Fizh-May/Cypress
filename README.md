@@ -2,7 +2,7 @@
 
 ![React](https://img.shields.io/badge/React-19-blue?logo=react&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white) ![Cypress](https://img.shields.io/badge/Cypress-15-17202C?logo=cypress&logoColor=white) ![Testing Library](https://img.shields.io/badge/Testing%20Library-Cypress-E33332?logo=testinglibrary&logoColor=white)
 
-> **ShopTest** là ứng dụng web thương mại điện tử xây dựng bằng **ReactJS** và **Vite**, tích hợp kiểm thử toàn diện bằng **Cypress** — bao gồm cả **E2E Testing** và **Component Testing** với **56 test cases**.
+> **ShopTest** là ứng dụng web thương mại điện tử xây dựng bằng **ReactJS** và **Vite**, tích hợp kiểm thử toàn diện bằng **Cypress** — bao gồm cả **E2E Testing** và **Component Testing** với **61 test cases**.
 
 🌐 **Live Demo:** [https://cypress-mocha.vercel.app/](https://cypress-mocha.vercel.app/)
 
@@ -51,7 +51,7 @@
 
 ---
 
-## 🧪 Test Cases (56 total)
+## 🧪 Test Cases (61 total)
 
 ### E2E Testing — 32 tests
 

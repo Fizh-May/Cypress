@@ -74,9 +74,22 @@ export default function ProductsPage() {
             </div>
 
             {loading ? (
-                <div className="products-loading" data-testid="products-loading">
-                    <div className="spinner" />
-                    <p>Đang tải sản phẩm...</p>
+                <div className="products-grid products-loading" data-testid="products-loading">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                        <div className="skeleton-card" key={i}>
+                            <div className="skeleton-image" />
+                            <div className="skeleton-body">
+                                <div className="skeleton-line skeleton-line-sm" />
+                                <div className="skeleton-line" />
+                                <div className="skeleton-line skeleton-line-lg" />
+                                <div className="skeleton-line skeleton-line-sm" />
+                                <div className="skeleton-footer">
+                                    <div className="skeleton-line skeleton-line-sm" />
+                                    <div className="skeleton-btn" />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             ) : products.length === 0 ? (
                 <div className="empty-state" data-testid="no-products">
